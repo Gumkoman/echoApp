@@ -393,7 +393,7 @@ class CustomTkinterApp(ttkb.Window):
                     self.status_bar.config(text="Oczekiwanie na polaczenie")
                     text_button = self.get_main_mcptt_button(driver)
                     print(f"text_button is {text_button}")
-                    if 'call' in text_button:
+                    if 'czenie' in text_button:
                         state = "start_recording"
                 elif state == "start_recording":
                     self.status_bar.config(text="Rozpoczynam nagrywanie ")
@@ -413,7 +413,7 @@ class CustomTkinterApp(ttkb.Window):
                     self.status_bar.config(text="Nagrywanie polaczenia")
                     text_button = self.get_main_mcptt_button(driver)
                     #TODO some logic to get that it stopped
-                    if "call" not in text_button:
+                    if "czenie" not in text_button:
                         state = 'stop_recording'
                 elif state == "stop_recording":
                     self.is_recording = False
