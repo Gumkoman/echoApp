@@ -1,9 +1,4 @@
 Appium_Python_Client==4.0.0
-Appium_Python_Client==4.0.1
-Appium_Python_Client==4.0.1
-audioplayer==0.6
 gTTS==2.5.2
-PyAudio==0.2.14
 pydub==0.25.1
-selenium==4.23.1
 ttkbootstrap==1.10.1

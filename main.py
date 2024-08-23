@@ -60,6 +60,22 @@ def declare_app_status(driver):
     return "unknown"
 
 def login_cybertel(driver,login,password):
+    """
+    The function `login_cybertel` attempts to log in to a mobile application using provided login
+    credentials and returns different messages based on the success or failure of each step.
+    
+    :param driver: The `driver` parameter in the `login_cybertel` function is typically an instance of a
+    WebDriver class that allows interaction with a web or mobile application during automated testing.
+    It is used to locate elements on the page, interact with them, and perform various actions like
+    clicking buttons or entering text
+    :param login: The `login` parameter in the `login_cybertel` function is the username or login ID
+    that the user wants to input into the login field of the Cybertel application
+    :param password: The `password` parameter in the `login_cybertel` function is used to pass the
+    password for logging into the Cybertel application. The function attempts to locate the password
+    input field on the login page and then enters the provided password into that field
+    :return: The function `login_cybertel` returns different messages based on the outcome of the login
+    process. Here are the possible return messages:
+    """
     try:
         element = WebDriverWait(driver,10).until(EC.presence_of_element_located((AppiumBy.ID,'com.EveryTalk.Global:id/login_id')))
         element.send_keys(login)
@@ -194,6 +210,10 @@ class CustomTkinterApp(ttkb.Window):
         self.status_bar.grid(row=7, column=0, columnspan=2, padx=10, pady=5, sticky="we")
 
     def update_devices(self):
+        """
+        The function `update_devices` retrieves a list of connected devices using adb command and
+        updates a combobox with the list of devices.
+        """
         try:
             # Run adb devices command and get the output
             result = subprocess.run(['adb', 'devices'], capture_output=True, text=True)
