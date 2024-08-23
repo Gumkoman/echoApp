@@ -5,11 +5,11 @@ import subprocess
 import time
 import threading
 import ttkbootstrap as ttkb
-import pyaudio
-import wave
-from pydub import AudioSegment
-from audioplayer import AudioPlayer
-
+# import pyaudio
+# import wave
+# from pydub import AudioSegment
+# from audioplayer import AudioPlayer
+import pygame
 from gtts import gTTS
 import datetime
 
@@ -154,9 +154,9 @@ class CustomTkinterApp(ttkb.Window):
         self.combo_var3.set("Odpowiedz robota + echo")
         self.combo_var4.set("Server 1")  # Default value for the fourth combo box
 
-        self.audio = pyaudio.PyAudio()
-        self.stream = None
-        self.frames = []
+        # self.audio = pyaudio.PyAudio()
+        # self.stream = None
+        # self.frames = []
 
         # Create and place the widgets
         self.create_widgets()
@@ -301,34 +301,37 @@ class CustomTkinterApp(ttkb.Window):
                     if check_for_call():
                         status = "start_recording"
                 elif status == "start_recording":
-                    #TODO some function that starts recording and is threded
-                    self.frames = []
-                    try:
-                        self.stream = self.audio.open(format=pyaudio.paInt16,
-                                                    channels=1,  # Use 1 channel for mono recording
-                                                    rate=44100,
-                                                    input=True,
-                                                    frames_per_buffer=1024)
-                        self.is_recording = True
-                        threading.Thread(target=self.record).start()
-                    except Exception as e:
-                        print(f"Error starting recording: {e}")
+                    # #TODO some function that starts recording and is threded
+                    # self.frames = []
+                    # try:
+                    #     self.stream = self.audio.open(format=pyaudio.paInt16,
+                    #                                 channels=1,  # Use 1 channel for mono recording
+                    #                                 rate=44100,
+                    #                                 input=True,
+                    #                                 frames_per_buffer=1024)
+                    #     self.is_recording = True
+                    #     threading.Thread(target=self.record).start()
+                    # except Exception as e:
+                    #     print(f"Error starting recording: {e}")
 
                     status = "recording"
                 elif status == "recording":
                     if not check_for_call():
                         status = "stop_recording"
                 elif status == "stop_recording":
-                    self.is_recording = False
-                    if self.stream is not None:
-                        self.stream.stop_stream()
-                        self.stream.close()
+                    # The above code is not valid Python code. The `self` keyword is typically used
+                    # within a class definition in Python to refer to the instance of the class
+                    # itself. However, in this context, it is not being used correctly. The `
+                    # self.is_recording = False
+                    # if self.stream is not None:
+                    #     self.stream.stop_stream()
+                    #     self.stream.close()
 
-                    with wave.open("output.wav", 'wb') as wf:
-                        wf.setnchannels(1)  # Set 1 channel for mono recording
-                        wf.setsampwidth(self.audio.get_sample_size(pyaudio.paInt16))
-                        wf.setframerate(44100)
-                        wf.writeframes(b''.join(self.frames))
+                    # with wave.open("output.wav", 'wb') as wf:
+                    #     wf.setnchannels(1)  # Set 1 channel for mono recording
+                    #     wf.setsampwidth(self.audio.get_sample_size(pyaudio.paInt16))
+                    #     wf.setframerate(44100)
+                    #     wf.writeframes(b''.join(self.frames))
                     status = "respond"
                 elif status == "respond":
                     try:
@@ -338,98 +341,104 @@ class CustomTkinterApp(ttkb.Window):
                         #TODO respond no need for it to be threaded
                         button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((AppiumBy.ID, 'com.EveryTalk.Global:id/main_menu_ptt_key')))
                         button.click()
-                        player = AudioPlayer('robot.mp3')
-                        player.play(block=True)
-                        player = AudioPlayer('output.wav')
-                        player.play(block=True)
+                        # player = AudioPlayer('robot.mp3')
+                        # player.play(block=True)
+                        pygame.mixer.init()
+                        pygame.mixer.music.load("robot.mp3")
+                        pygame.mixer.music.play()
+
+                        while pygame.mixer.music.get_busy():
+                            pygame.time.Clock().tick(10)
+                        # player = AudioPlayer('output.wav')
+                        # player.play(block=True)
                         button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((AppiumBy.ID, 'com.EveryTalk.Global:id/main_menu_ptt_key')))
                         button.click()
                     except:
                         pass
                     status = "Waiting"                  
 
-        elif selected_app == "MCPTT":
-            #init app
-            try:
-                self.status_bar.config(text="Proba Logowania do Aplikacji")
-                element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((AppiumBy.ID, 'pl.dgt.mcptt:id/activity_login_username_edittext')))
-                element.send_keys(login_text)
-                element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((AppiumBy.ID, 'pl.dgt.mcptt:id/activity_login_password_edittext')))
-                element.send_keys(password_text)
-                element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((AppiumBy.ID, 'pl.dgt.mcptt:id/activity_login_button')))
-                element.click()
+        # elif selected_app == "MCPTT":
+        #     #init app
+        #     try:
+        #         self.status_bar.config(text="Proba Logowania do Aplikacji")
+        #         element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((AppiumBy.ID, 'pl.dgt.mcptt:id/activity_login_username_edittext')))
+        #         element.send_keys(login_text)
+        #         element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((AppiumBy.ID, 'pl.dgt.mcptt:id/activity_login_password_edittext')))
+        #         element.send_keys(password_text)
+        #         element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((AppiumBy.ID, 'pl.dgt.mcptt:id/activity_login_button')))
+        #         element.click()
                 
-            except:
-                pass
-            self.status_bar.config(text="Wybieranie serwera MCPTT")
-            select_mcptt_server(driver)
-            #go to main loop
-            state = "Waiting"
-            while self._is_running:
-                if state == "Waiting":
-                    time.sleep(1)
-                    self.status_bar.config(text="Oczekiwanie na polaczenie")
-                    text_button = self.get_main_mcptt_button(driver)
-                    if 'call' in text_button:
-                        state = "start_recording"
-                elif state == "start_recording":
-                    self.status_bar.config(text="Rozpoczynam nagrywanie ")
-                    self.frames = []
-                    try:
-                        self.stream = self.audio.open(format=pyaudio.paInt16,
-                                                    channels=1,  # Use 1 channel for mono recording
-                                                    rate=44100,
-                                                    input=True,
-                                                    frames_per_buffer=1024)
-                        self.is_recording = True
-                        threading.Thread(target=self.record).start()
-                    except Exception as e:
-                        print(f"Error starting recording: {e}")
-                    state = "recording"
-                elif state == "recording":
-                    self.status_bar.config(text="Nagrywanie polaczenia")
-                    text_button = self.get_main_mcptt_button(driver)
-                    #TODO some logic to get that it stopped
-                    if "call" not in text_button:
-                        state = 'stop_recording'
-                elif state == "stop_recording":
-                    self.is_recording = False
-                    if self.stream is not None:
-                        self.stream.stop_stream()
-                        self.stream.close()
+        #     except:
+        #         pass
+        #     self.status_bar.config(text="Wybieranie serwera MCPTT")
+        #     select_mcptt_server(driver)
+        #     #go to main loop
+        #     state = "Waiting"
+        #     while self._is_running:
+        #         if state == "Waiting":
+        #             time.sleep(1)
+        #             self.status_bar.config(text="Oczekiwanie na polaczenie")
+        #             text_button = self.get_main_mcptt_button(driver)
+        #             if 'call' in text_button:
+        #                 state = "start_recording"
+        #         elif state == "start_recording":
+        #             self.status_bar.config(text="Rozpoczynam nagrywanie ")
+        #             self.frames = []
+        #             try:
+        #                 self.stream = self.audio.open(format=pyaudio.paInt16,
+        #                                             channels=1,  # Use 1 channel for mono recording
+        #                                             rate=44100,
+        #                                             input=True,
+        #                                             frames_per_buffer=1024)
+        #                 self.is_recording = True
+        #                 threading.Thread(target=self.record).start()
+        #             except Exception as e:
+        #                 print(f"Error starting recording: {e}")
+        #             state = "recording"
+        #         elif state == "recording":
+        #             self.status_bar.config(text="Nagrywanie polaczenia")
+        #             text_button = self.get_main_mcptt_button(driver)
+        #             #TODO some logic to get that it stopped
+        #             if "call" not in text_button:
+        #                 state = 'stop_recording'
+        #         elif state == "stop_recording":
+        #             self.is_recording = False
+        #             if self.stream is not None:
+        #                 self.stream.stop_stream()
+        #                 self.stream.close()
 
-                    with wave.open("output.wav", 'wb') as wf:
-                        wf.setnchannels(1)  # Set 1 channel for mono recording
-                        wf.setsampwidth(self.audio.get_sample_size(pyaudio.paInt16))
-                        wf.setframerate(44100)
-                        wf.writeframes(b''.join(self.frames))
-                    state = "respond"
-                elif state == "respond":
-                    self.status_bar.config(text="Odpowiadanie")
-                    try:
-                        now = datetime.datetime.now()
-                        msg = f'Otrzymalem wiadomosc o godzinie {now.hour} {now.minute} minut'
-                        text_to_speech(msg, 'robot.mp3')
-                        #TODO respond no need for it to be threaded
-                        button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((AppiumBy.ID, 'pl.dgt.mcptt:id/ptt_button_only')))
-                        audio_duration = AudioSegment.from_file('robot.mp3').duration_seconds
-                        player = AudioPlayer('robot.mp3')
-                        player.play(block=False)
-                        driver.execute_script('mobile: longClickGesture', {
-                            'elementId': button.id,
-                            'duration': audio_duration * 1000 + 500
-                        })
-                        button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((AppiumBy.ID, 'pl.dgt.mcptt:id/ptt_button_only')))
-                        audio_duration = AudioSegment.from_file('output.wav').duration_seconds
-                        player = AudioPlayer('output.wav')
-                        player.play(block=False)
-                        driver.execute_script('mobile: longClickGesture', {
-                            'elementId': button.id,
-                            'duration': audio_duration * 1000 + 500
-                        })
-                    except:
-                        pass
-                    state = "Waiting"
+        #             with wave.open("output.wav", 'wb') as wf:
+        #                 wf.setnchannels(1)  # Set 1 channel for mono recording
+        #                 wf.setsampwidth(self.audio.get_sample_size(pyaudio.paInt16))
+        #                 wf.setframerate(44100)
+        #                 wf.writeframes(b''.join(self.frames))
+        #             state = "respond"
+        #         elif state == "respond":
+        #             self.status_bar.config(text="Odpowiadanie")
+        #             try:
+        #                 now = datetime.datetime.now()
+        #                 msg = f'Otrzymalem wiadomosc o godzinie {now.hour} {now.minute} minut'
+        #                 text_to_speech(msg, 'robot.mp3')
+        #                 #TODO respond no need for it to be threaded
+        #                 button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((AppiumBy.ID, 'pl.dgt.mcptt:id/ptt_button_only')))
+        #                 audio_duration = AudioSegment.from_file('robot.mp3').duration_seconds
+        #                 player = AudioPlayer('robot.mp3')
+        #                 player.play(block=False)
+        #                 driver.execute_script('mobile: longClickGesture', {
+        #                     'elementId': button.id,
+        #                     'duration': audio_duration * 1000 + 500
+        #                 })
+        #                 button = WebDriverWait(driver, 10).until(EC.presence_of_element_located((AppiumBy.ID, 'pl.dgt.mcptt:id/ptt_button_only')))
+        #                 audio_duration = AudioSegment.from_file('output.wav').duration_seconds
+        #                 player = AudioPlayer('output.wav')
+        #                 player.play(block=False)
+        #                 driver.execute_script('mobile: longClickGesture', {
+        #                     'elementId': button.id,
+        #                     'duration': audio_duration * 1000 + 500
+        #                 })
+        #             except:
+        #                 pass
+        #             state = "Waiting"
 
             
 

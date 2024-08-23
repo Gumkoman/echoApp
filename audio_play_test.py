@@ -1,30 +1,45 @@
-import wave
-import pyaudio
+import pygame
+from gtts import gTTS
+import time
 
-# Open the .wav file
-wf = wave.open("output.wav", 'rb')
+tts = gTTS(text="Abecadlo", lang='pl')
+tts.save('test.mp3')
+time.sleep(1)
+pygame.mixer.init()
+pygame.mixer.music.load("test.mp3")
+pygame.mixer.music.play()
+print("asd")
+while pygame.mixer.music.get_busy():
+    pygame.time.Clock().tick(10)
+print("Halo")
 
-# Initialize pyaudio
-p = pyaudio.PyAudio()
+# import wave
+# import pyaudio
 
-# Open a stream
-stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
-                channels=wf.getnchannels(),
-                rate=wf.getframerate(),
-                output=True)
+# # Open the .wav file
+# wf = wave.open("output.wav", 'rb')
 
-# Read data in chunks
-data = wf.readframes(1024)
+# # Initialize pyaudio
+# p = pyaudio.PyAudio()
 
-# Play the sound by writing the audio data to the stream
-while len(data) > 0:
-    stream.write(data)
-    data = wf.readframes(1024)
+# # Open a stream
+# stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
+#                 channels=wf.getnchannels(),
+#                 rate=wf.getframerate(),
+#                 output=True)
 
-# Stop and close the stream
-stream.stop_stream()
-stream.close()
+# # Read data in chunks
+# data = wf.readframes(1024)
 
-# Close pyaudio
-p.terminate()
-print("Ni mom pojecia")
+# # Play the sound by writing the audio data to the stream
+# while len(data) > 0:
+#     stream.write(data)
+#     data = wf.readframes(1024)
+
+# # Stop and close the stream
+# stream.stop_stream()
+# stream.close()
+
+# # Close pyaudio
+# p.terminate()
+# print("Ni mom pojecia")
