@@ -392,6 +392,7 @@ class CustomTkinterApp(ttkb.Window):
                     time.sleep(1)
                     self.status_bar.config(text="Oczekiwanie na polaczenie")
                     text_button = self.get_main_mcptt_button(driver)
+                    print(f"text_button is {text_button}")
                     if 'call' in text_button:
                         state = "start_recording"
                 elif state == "start_recording":
