@@ -78,11 +78,13 @@ def login_cybertel(driver,login,password):
     """
     try:
         element = WebDriverWait(driver,10).until(EC.presence_of_element_located((AppiumBy.ID,'com.EveryTalk.Global:id/login_id')))
+        element.clear()
         element.send_keys(login)
     except:
         return "unable to pass login"
     try:
         element = WebDriverWait(driver,10).until(EC.presence_of_element_located((AppiumBy.ID,'com.EveryTalk.Global:id/login_pw')))
+        element.clear()
         element.send_keys(password)
     except:
         return "unable to pass password"
@@ -284,6 +286,7 @@ class CustomTkinterApp(ttkb.Window):
                 if status == "login_page":
                     self.status_bar.config(text="Logowanie do aplikacji")
                     status = login_cybertel(driver,login_text,password_text)
+                    print(f"Staus of login is {status}")
                 elif status == "main_page":
                     self.status_bar.config(text="Oczekiwanie na przycisk")
                     pass
